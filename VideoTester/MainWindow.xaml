@@ -14,6 +14,118 @@
     <Window.Resources>
         <BindingConverter:PlayPauseMediaStateConverter x:Key="PlayPauseMediaStateConverter" />
         <BindingConverter:FilePathToFileNameConverter x:Key="FilePathToFileNameConverter" />
+        <Style x:Key="FocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="2" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="OptionMark.Static.Background" Color="#FFFFFFFF"/>
+        <SolidColorBrush x:Key="OptionMark.Static.Border" Color="#FF707070"/>
+        <Style x:Key="OptionMarkFocusVisual">
+            <Setter Property="Control.Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Rectangle Margin="14,0,0,0" SnapsToDevicePixels="true" Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" StrokeThickness="1" StrokeDashArray="1 2"/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <SolidColorBrush x:Key="OptionMark.MouseOver.Background" Color="#FFF3F9FF"/>
+        <SolidColorBrush x:Key="OptionMark.MouseOver.Border" Color="#FF5593FF"/>
+        <SolidColorBrush x:Key="OptionMark.MouseOver.Glyph" Color="#FF212121"/>
+        <SolidColorBrush x:Key="OptionMark.Disabled.Background" Color="#FFE6E6E6"/>
+        <SolidColorBrush x:Key="OptionMark.Disabled.Border" Color="#FFBCBCBC"/>
+        <SolidColorBrush x:Key="OptionMark.Disabled.Glyph" Color="#FF707070"/>
+        <SolidColorBrush x:Key="OptionMark.Pressed.Background" Color="#FFD9ECFF"/>
+        <SolidColorBrush x:Key="OptionMark.Pressed.Border" Color="#FF3C77DD"/>
+        <SolidColorBrush x:Key="OptionMark.Pressed.Glyph" Color="#FF212121"/>
+        <SolidColorBrush x:Key="OptionMark.Static.Glyph" Color="#FF212121"/>
+        <Style x:Key="CheckBox" TargetType="{x:Type CheckBox}">
+            <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
+            <Setter Property="Background" Value="{StaticResource OptionMark.Static.Background}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource OptionMark.Static.Border}"/>
+            <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type CheckBox}">
+                        <Grid x:Name="templateRoot" Background="Transparent" SnapsToDevicePixels="True">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Border x:Name="checkBoxBorder" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="1" VerticalAlignment="{TemplateBinding VerticalContentAlignment}">
+                                <Grid x:Name="markGrid">
+                                    <Path x:Name="optionMark" Data="F1 M 9.97498,1.22334L 4.6983,9.09834L 4.52164,9.09834L 0,5.19331L 1.27664,3.52165L 4.255,6.08833L 8.33331,1.52588e-005L 9.97498,1.22334 Z " Fill="{StaticResource OptionMark.Static.Glyph}" Margin="1" Opacity="0" Stretch="None"/>
+                                    <Rectangle x:Name="indeterminateMark" Fill="{StaticResource OptionMark.Static.Glyph}" Margin="1" Opacity="0" Width="2" Height="9" RenderTransformOrigin="0.5,0.5">
+                                        <Rectangle.RenderTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform/>
+                                                <SkewTransform/>
+                                                <RotateTransform Angle="45"/>
+                                                <TranslateTransform/>
+                                            </TransformGroup>
+                                        </Rectangle.RenderTransform>
+                                    </Rectangle>
+                                    <Rectangle x:Name="indeterminateMark2" Fill="{StaticResource OptionMark.Static.Glyph}" Margin="1" Opacity="0" Width="2" Height="9" RenderTransformOrigin="0.5,0.5">
+                                        <Rectangle.RenderTransform>
+                                            <TransformGroup>
+                                                <ScaleTransform/>
+                                                <SkewTransform/>
+                                                <RotateTransform Angle="-45"/>
+                                                <TranslateTransform/>
+                                            </TransformGroup>
+                                        </Rectangle.RenderTransform>
+                                    </Rectangle>
+                                </Grid>
+                            </Border>
+                            <ContentPresenter x:Name="contentPresenter" Grid.Column="1" Focusable="False" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasContent" Value="true">
+                                <Setter Property="FocusVisualStyle" Value="{StaticResource OptionMarkFocusVisual}"/>
+                                <Setter Property="Padding" Value="4,-1,0,0"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="true">
+                                <Setter Property="Background" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.MouseOver.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.MouseOver.Border}"/>
+                                <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource OptionMark.MouseOver.Glyph}"/>
+                                <Setter Property="Fill" TargetName="indeterminateMark" Value="{StaticResource OptionMark.MouseOver.Glyph}"/>
+                                <Setter Property="Fill" TargetName="indeterminateMark2" Value="{StaticResource OptionMark.MouseOver.Glyph}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Background" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.Disabled.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.Disabled.Border}"/>
+                                <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource OptionMark.Disabled.Glyph}"/>
+                                <Setter Property="Fill" TargetName="indeterminateMark" Value="{StaticResource OptionMark.Disabled.Glyph}"/>
+                                <Setter Property="Fill" TargetName="indeterminateMark2" Value="{StaticResource OptionMark.Disabled.Glyph}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="true">
+                                <Setter Property="Background" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.Pressed.Background}"/>
+                                <Setter Property="BorderBrush" TargetName="checkBoxBorder" Value="{StaticResource OptionMark.Pressed.Border}"/>
+                                <Setter Property="Fill" TargetName="optionMark" Value="{StaticResource OptionMark.Pressed.Glyph}"/>
+                                <Setter Property="Fill" TargetName="indeterminateMark" Value="{StaticResource OptionMark.Pressed.Glyph}"/>
+                                <Setter Property="Fill" TargetName="indeterminateMark2" Value="{StaticResource OptionMark.Pressed.Glyph}"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="true">
+                                <Setter Property="Opacity" TargetName="optionMark" Value="1"/>
+                                <Setter Property="Opacity" TargetName="indeterminateMark" Value="0"/>
+                                <Setter Property="Opacity" TargetName="indeterminateMark2" Value="0"/>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="{x:Null}">
+                                <Setter Property="Opacity" TargetName="optionMark" Value="0"/>
+                                <Setter Property="Opacity" TargetName="indeterminateMark" Value="1"/>
+                                <Setter Property="Opacity" TargetName="indeterminateMark2" Value="1"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     <Window.DataContext>
         <Binding Path="Main" Source="{StaticResource Locator}" />
@@ -21,6 +133,105 @@
 
     <Grid x:Name="LayoutRoot">
         <TabControl x:Name="MainTabs">
+
+            <TabItem x:Name="ConvertTabItem"
+                     Width="100"
+                     Height="45"
+                     FontSize="20"
+                     Header="Convert">
+                <Grid x:Name="ConvertGrid"
+                      DataContext="{Binding Convert,
+                                            Source={StaticResource Locator}}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="35*"/>
+                        <RowDefinition Height="35*"/>
+                        <RowDefinition Height="405*"/>
+                        <RowDefinition Height="38*"/>
+                        <RowDefinition Height="20" />
+                        <RowDefinition Height="40" />
+                        <RowDefinition Height="40" />
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="40" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="100"/>
+                        <ColumnDefinition Width="40" />
+                    </Grid.ColumnDefinitions>
+                    <GroupBox
+                        Grid.Row="4"
+                        Grid.Column="1"
+                        Grid.ColumnSpan="2" Margin="0" Header="Queue">
+                        <ScrollViewer Margin="0" VerticalScrollBarVisibility="Auto">
+                            <ItemsControl x:Name="Queue"
+                                ItemsSource="{Binding Queue}" VerticalAlignment="Top">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate>
+                                        <StackPanel Orientation="Vertical" />
+                                    </ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Height="35">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition />
+                                                <ColumnDefinition Width="50" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{Binding FileName}" FontSize="11" VerticalAlignment="Center" />
+                                            <Viewbox Grid.Column="1"
+                                                HorizontalAlignment="Right"
+                                                VerticalAlignment="Bottom">
+                                                <CheckBox Width="16"
+                                                    Height="15"
+                                                    IsChecked="{Binding IsComplete}"
+                                                    IsHitTestVisible="False" IsThreeState="True" Style="{DynamicResource CheckBox}" />
+                                            </Viewbox>
+                                            <Viewbox Grid.Column="2" Width="Auto" Height="Auto" Margin="2">
+                                                <Button x:Name="RemoveButton"
+                                                    Command="{Binding Convert.RemoveFromQueueCommand, Source={StaticResource Locator}}"
+                                                    CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}"
+                                                    Content="Remove" Width="75" Height="30" />
+                                            </Viewbox>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </ScrollViewer>
+                    </GroupBox>
+                    <ProgressBar x:Name="ConvertProgressBar" Grid.Row="6"
+                                 Grid.Column="1"
+                                 Height="20"
+                                 Margin="0"
+                                 LargeChange="2"
+                                 SmallChange="1"
+                                 Value="{Binding CurrentConvertProgress}" Grid.RowSpan="2" Grid.ColumnSpan="2" />
+                    <Button x:Name="AddButton"
+                            Grid.Row="5"
+                            Grid.Column="2"
+                            Width="100"
+                            Command="{Binding AddToQueueCommand}"
+                            Content="Add" Margin="0" HorizontalAlignment="Right" />
+                    <GroupBox x:Name="ConvertInstructionsGroupBox"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="0"
+                        FontSize="16"
+                        Header="Instructions" Grid.ColumnSpan="2">
+                        <TextBlock x:Name="InstructionsTextBlock1"
+                            Margin="5,5,0,5"
+                            FontSize="14"
+                            TextWrapping="Wrap" Text="Add videos to the queue to convert them and save them to the output directiory. To Change this directory click &quot;change&quot;. To cancel a download click the 'x' by it's name." />
+                    </GroupBox>
+                    <TextBlock x:Name="OutputDirectoryLabel" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Output Directory:" VerticalAlignment="Bottom" Grid.Row="2" Grid.Column="1"/>
+                    <TextBox x:Name="OutputDirectoryBox" TextWrapping="Wrap" Text="{Binding OutputDirectory}" Grid.Row="3" Grid.Column="1" FontSize="14" VerticalContentAlignment="Bottom" FontFamily="Arial"/>
+                    <Button x:Name="ChangeDirectoryButton" Content="Change" Width="100" Grid.Row="3" Grid.Column="2" Command="{Binding ChangeOutputDirectoryCommand}"/>
+                    <TextBlock x:Name="CurrentConvertTextBlock" TextWrapping="Wrap" Text="{Binding CurrentConvertText}" Grid.Row="6" Grid.Column="1" FontFamily="Arial" FontSize="11" VerticalAlignment="Bottom"/>
+                    <TextBlock x:Name="EstimatedTimeRemaining" TextWrapping="Wrap" Text="{Binding EstimatedTimeRemainingText}" Grid.Row="6" Grid.Column="2" FontFamily="Arial" FontSize="11" VerticalAlignment="Bottom" Margin="0" HorizontalAlignment="Right"/>
+                </Grid>
+            </TabItem>
             <TabItem x:Name="TestTabItem"
                      Width="100"
                      Height="45"
@@ -216,103 +427,6 @@
                                       MediaFailed="PreviewMediaElement_MediaFailed"
                                       ScrubbingEnabled="True" />
                     </Grid>
-                </Grid>
-            </TabItem>
-            <TabItem x:Name="ConvertTabItem"
-                     Width="100"
-                     Height="45"
-                     FontSize="20"
-                     Header="Convert">
-                <Grid x:Name="ConvertGrid"
-                      DataContext="{Binding Convert,
-                                            Source={StaticResource Locator}}">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="40" />
-                        <RowDefinition Height="Auto" />
-                        <RowDefinition Height="35*"/>
-                        <RowDefinition Height="35*"/>
-                        <RowDefinition Height="405*"/>
-                        <RowDefinition Height="38*"/>
-                        <RowDefinition Height="20" />
-                        <RowDefinition Height="40" />
-                        <RowDefinition Height="40" />
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="40" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="100"/>
-                        <ColumnDefinition Width="40" />
-                    </Grid.ColumnDefinitions>
-                    <GroupBox
-                        Grid.Row="4"
-                        Grid.Column="1"
-                        Grid.ColumnSpan="2" Margin="0" Header="Queue">
-                        <ScrollViewer Margin="0" VerticalScrollBarVisibility="Auto">
-                            <ItemsControl x:Name="Queue"
-                                ItemsSource="{Binding Queue}" VerticalAlignment="Top">
-                                <ItemsControl.ItemsPanel>
-                                    <ItemsPanelTemplate>
-                                        <StackPanel Orientation="Vertical" />
-                                    </ItemsPanelTemplate>
-                                </ItemsControl.ItemsPanel>
-
-                                <ItemsControl.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid Height="35">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition />
-                                                <ColumnDefinition Width="50" />
-                                                <ColumnDefinition Width="50" />
-                                            </Grid.ColumnDefinitions>
-                                            <TextBlock Text="{Binding FileName}" />
-                                            <Viewbox Grid.Column="1"
-                                                HorizontalAlignment="Right"
-                                                VerticalAlignment="Bottom">
-                                                <CheckBox Width="16"
-                                                    Height="15"
-                                                    IsChecked="{Binding IsComplete}"
-                                                    IsHitTestVisible="False" />
-                                            </Viewbox>
-                                            <Viewbox Grid.Column="2" Width="35" Height="35">
-                                                <Button x:Name="RemoveButton"
-                                                    Command="{Binding Convert.RemoveFromQueueCommand, Source={StaticResource Locator}}"
-                                                    CommandParameter="{Binding DataContext, RelativeSource={RelativeSource Self}}"
-                                                    Content="X" Width="30" Height="30" />
-                                            </Viewbox>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ItemsControl.ItemTemplate>
-                            </ItemsControl>
-                        </ScrollViewer>
-                    </GroupBox>
-                    <ProgressBar x:Name="ConvertProgressBar" Grid.Row="6"
-                                 Grid.Column="1"
-                                 Height="20"
-                                 Margin="0,19.667,0.333,0.333"
-                                 LargeChange="2"
-                                 SmallChange="1"
-                                 Value="{Binding CurrentConvertProgress}" Grid.RowSpan="2" />
-                    <Button x:Name="AddButton"
-                            Grid.Row="5"
-                            Grid.Column="2"
-                            Width="100"
-                            Command="{Binding AddToQueueCommand}"
-                            Content="Add" Margin="0" HorizontalAlignment="Right" />
-                    <GroupBox x:Name="ConvertInstructionsGroupBox"
-                        Grid.Row="1"
-                        Grid.Column="1"
-                        Margin="0"
-                        FontSize="16"
-                        Header="Instructions" Grid.ColumnSpan="2">
-                        <TextBlock x:Name="InstructionsTextBlock1"
-                            Margin="5,5,0,5"
-                            FontSize="14"
-                            TextWrapping="Wrap" Text="Add videos to the queue to convert them and save them to the output directiory. To Change this directory click &quot;change&quot;. To cancel a download click the 'x' by it's name." />
-                    </GroupBox>
-                    <TextBlock x:Name="OutputDirectoryLabel" HorizontalAlignment="Left" TextWrapping="Wrap" Text="Output Directory:" VerticalAlignment="Bottom" Grid.Row="2" Grid.Column="1"/>
-                    <TextBox x:Name="OutputDirectoryBox" TextWrapping="Wrap" Text="{Binding OutputDirectory}" Grid.Row="3" Grid.Column="1" FontSize="14" VerticalContentAlignment="Bottom" FontFamily="Arial"/>
-                    <Button x:Name="ChangeDirectoryButton" Content="Change" Width="100" Grid.Row="3" Grid.Column="2" Command="{Binding ChangeOutputDirectoryCommand}"/>
-                    <TextBlock x:Name="CurrentConvertTextBlock" TextWrapping="Wrap" Text="{Binding CurrentConvertText}" Grid.Row="6" Grid.Column="1" FontFamily="Arial" FontSize="12" VerticalAlignment="Bottom"/>
                 </Grid>
             </TabItem>
         </TabControl>

@@ -34,8 +34,8 @@ namespace VideoTester.ViewModel
             }
         }
 
-        private bool _isComplete;
-        public bool IsComplete
+        private bool? _isComplete = false;
+        public bool? IsComplete
         {
             get { return _isComplete; }
             set

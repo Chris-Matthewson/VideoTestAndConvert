@@ -85,24 +85,48 @@ namespace VideoTester.ViewModel
         {
             foreach (var videoViewModel in Queue)
             {
-                if (videoViewModel.FilePath == file)
+                if (videoViewModel.FilePath == file.Split(',')[0])
                 {
-                    videoViewModel.IsComplete = true;
+                    if (file.Split(',').Length == 2)
+                    {
+                        videoViewModel.IsComplete = null;
+                    }
+                    else
+                    {
+                        videoViewModel.IsComplete = true;
+                    }
                 }
             }
 
-            var jobsComplete = Queue.Count(item => item.IsComplete);
-            CurrentConvertText = jobsComplete + " / " + Queue.Count + "   Current job complete.";
+            var jobsComplete = Queue.Count(item => item.IsComplete != false);
+            CurrentConvertText = jobsComplete + " / " + Queue.Count;
+            if (file.Split(',').Length == 2)
+            {
+                CurrentConvertText += "   Current job FAILED.";
+            }
+            else
+            {
+                CurrentConvertText += "   Current job complete.";
+            }
             CurrentConvertProgress = 100;
+            EstimatedTimeRemainingText = "";
 
             StartWorker();
         }
 
-        private void WorkerOnProgressChanged(object sender, int i)
+        private void WorkerOnProgressChanged(object sender, object[] args)
         {
-            var jobsComplete = Queue.Count(item => item.IsComplete);
-            CurrentConvertText = (jobsComplete + 1) + "/" + Queue.Count + " - " + Path.GetFileName(_worker.CurrentPath) + " - " + i.ToString("00") + "%";
-            CurrentConvertProgress = i; 
+            var jobsComplete = Queue.Count(item => item.IsComplete != false);
+            CurrentConvertText = (jobsComplete + 1) + "/" + Queue.Count + " - " + Path.GetFileName(_worker.CurrentPath) + " - " + ((int)args[0]).ToString("0") + "%";
+            CurrentConvertProgress = (int)args[0];
+            if ((string)args[1] == "0")
+            {
+                EstimatedTimeRemainingText = "";
+            }
+            else
+            {
+                EstimatedTimeRemainingText = "~" + (string)args[1] + " minutes left";
+            }
         }
 
         protected void AddToQueue()
@@ -132,7 +156,7 @@ namespace VideoTester.ViewModel
         {
             foreach (var t in Queue)
             {
-                if (!t.IsComplete)
+                if (t.IsComplete == false)
                 {
                     if (t.FilePath != null)
                     {
@@ -140,6 +164,22 @@ namespace VideoTester.ViewModel
                     }
                     return;
                 }
+            }
+        }
+
+        private string _estimatedTimeRemainingText = "";
+
+        public string EstimatedTimeRemainingText
+        {
+            get { return _estimatedTimeRemainingText; }
+            set
+            {
+                if (Equals(_estimatedTimeRemainingText, value))
+                {
+                    return;
+                }
+                _estimatedTimeRemainingText = value;
+                RaisePropertyChanged();
             }
         }
 
